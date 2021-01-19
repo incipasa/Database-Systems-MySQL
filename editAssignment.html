@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+
+{% block title %} Register {% endblock %}
+{% block content %} 
+<table class="table is-striped is-fullwidth">    
+    <tr>
+        <th>Course Id</th>
+        <th>Assignment Id</th>
+        <th>Assignment Time</th>
+        <th>Assignment Type</th>
+        <th>Assignment Average</th>
+
+    </tr>
+    <tr>
+
+        <tr>
+            {% for list in row %}  
+            
+            <tr>
+          
+                <td>{{ list.courseid }}</td>
+                <td>{{ list.assignmentid }}</td>
+                <td>{{ list.time }}</td>
+                <td>{{ list.assignmnettype }}</td>
+                <td>{{ list.average }}</td>
+    
+            </tr>
+        {% endfor %}
+        </tr>  
+
+
+    </tr>        
+    <ul>
+
+</table>
+<div class = "container">
+<div class = "row">
+<div class = "col-md-6 col-md-offset-3">
+<form action="/editAssignment" method="POST">
+<div class = "form-group">
+    <label> Instructor ID </label>
+    <input type = "text" class = "form-control" name ="ins_id">
+</div>     
+<div class = "form-group">
+    <label> Assignment ID </label>
+    <input type = "text" class = "form-control" name ="assi_id">
+</div>    
+<div class = "form-group">
+    <label> Time </label>
+    <input type = "text" class = "form-control" name ="assi_time">
+</div>
+<div class = "form-group">
+    <label> Type </label>
+    <input type = "text" class = "form-control" name ="assi_type">
+</div>  
+<div class = "form-group">
+    <label> Average </label>
+    <input type = "text" class = "form-control" name ="assi_average">
+</div>    
+    
+<button type = "submit" class = "btn btn-primary"> Edit </button>
+
+</form>
+</div>
+</div>
+</div>
+
+{% endblock %}

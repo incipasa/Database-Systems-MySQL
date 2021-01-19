@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block title %} Home {% endblock %}
+{% block content %} 
+
+<table class="table is-striped is-fullwidth">    
+    <tr>
+        <th>Course Id</th>
+        <th>Course name</th>
+        <th>Department id</th>
+        <th>Lesson Hour</th>
+        <th>Assignment Number</th>
+
+    </tr>
+    <tr>
+
+        <tr>
+            {% for list in row %}
+            
+            <tr>
+          
+                <td>{{ list.courseid }}</td>
+                <td>{{ list.coursename }}</td>
+                <td>{{ list.departmentid }}</td>
+                <td>{{ list.lessonhour }}</td>
+                <td>{{ list.assignmentnumber }}</td>
+    
+            </tr>
+        {% endfor %}
+        </tr>  
+
+
+    </tr>        
+    <ul>
+
+</table>
+
+<ul>
+    <li><a href="/courseStudent">Student Courses</a></li>
+</ul>
+<ul>
+    <li><a href="/courseProperty">List Courses Students Have Taken </a> </li>
+</ul>
+
+{% endblock %}

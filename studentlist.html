@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block title %} Home {% endblock %}
+{% block content %} 
+
+<table class="table is-striped is-fullwidth">    
+    <tr>
+        <th>Instructor id</th>
+        <th>Course Id</th>
+        <th>Course name</th>
+        <th>Student id</th>
+        <th>Student Name</th>
+        <th> Attendence (%) </th>
+        <th>Course Grade</th>
+        <th>Assignment Average</th>
+
+    </tr>
+    <tr>
+
+        <tr>
+            {% for list in row %}
+            
+            <tr>
+          
+                <td>{{ list.instructorid }}</td>
+                <td>{{ list.courseid }}</td>
+                <td>{{ list.coursename }}</td>
+                <td>{{ list.studentid }}</td>
+                <td>{{ list.studentname }}</td>
+                <td>{{ list.attendencehours }}</td>
+                <td>{{ list.coursegrade }}</td>
+                <td>{{ list.assignmentaverage }}</td>
+                
+    
+            </tr>
+        {% endfor %}
+        </tr>  
+
+
+    </tr>        
+
+</table>
+<ul>
+    <li><a href="/courseInstructor">Instructor Courses</a></li>
+</ul>
+<ul>
+    <li><a href="/departments">List Departments </a></li>
+</ul>
+<ul>
+    <li><a href="/assignments">List Assignments </a></li>
+</ul>
+<ul>
+    <li><a href="/courses">List Courses </a> </li>
+</ul>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block title %} Home {% endblock %}
+{% block content %} 
+
+<div class = "container">
+<div class = "row">
+<div class = "col-md-6 col-md-offset-3">
+
+<h2>  Already registered this course </h2>
+
+</div>
+</div>
+</div>
+<table class="table is-striped is-fullwidth">    
+    <tr>
+        <th>Student Id</th>
+        <th>Course id</th>
+
+    </tr>
+    <tr>
+
+        <tr>
+            
+            <tr>
+          
+                <td>{{ row1 }}</td>
+                <td>{{ row2 }}</td> 
+
+            </tr>
+        </tr>  
+
+
+    </tr>        
+    <ul>
+
+</table>
+
+<ul>
+    <li><a href="/courseStudent">Student Courses</a></li>
+</ul>
+<ul>
+    <li><a href="/courseProperty">List Courses Students Have Taken </a> </li>
+</ul>
+
+
+{% endblock %}

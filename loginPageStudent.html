@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block title %} Home {% endblock %}
+{% block content %} 
+
+<table class="table is-striped is-fullwidth">    
+        <tr>
+            <th>Email</th>
+            <th>Student name</th>
+            <th>Student Id</th>
+
+
+        </tr>
+        <tr>
+            <td>{{ session ['student_email'] }}</td>
+            <td>{{ session['studentname'] }}</td>
+            <td>{{session['studentid'] }}</td>
+
+        </tr>        
+    
+</table>
+
+<ul>
+    <li><a href="/courseStudent">Student Courses</a></li>
+</ul>
+<ul>
+    <li><a href="/courseProperty">List Courses Students Have Taken </a> </li>
+</ul>
+
+{% endblock %}

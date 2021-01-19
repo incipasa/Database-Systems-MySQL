@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block title %} Home {% endblock %}
+{% block content %} 
+
+<table class="table is-striped is-fullwidth">    
+    <tr>
+        <th>Course Id</th>
+        <th>Assignment Id</th>
+        <th>Assignment Time</th>
+        <th>Assignment Type</th>
+        <th>Assignment Average</th>
+
+    </tr>
+    <tr>
+
+        <tr>
+            {% for list in row %}  
+            
+            <tr>
+          
+                <td>{{ list.courseid }}</td>
+                <td>{{ list.assignmentid }}</td>
+                <td>{{ list.time }}</td>
+                <td>{{ list.assignmnettype }}</td>
+                <td>{{ list.average }}</td>
+    
+            </tr>
+        {% endfor %}
+        </tr>  
+
+
+    </tr>        
+    <ul>
+
+</table>
+
+<ul>
+    <li><a href="/departments">List Departments </a></li>
+</ul>
+<ul>
+    <li><a href="/courseInstructor">Instructor Courses</a></li>
+</ul>
+<ul>
+    <li><a href="/studentlist">List Students </a></li>
+</ul>    
+<ul>
+    <li><a href="/courses">List Courses </a> </li>
+</ul>
+
+{% endblock %}

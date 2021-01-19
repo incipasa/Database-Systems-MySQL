@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block title %} Home {% endblock %}
+{% block content %} 
+
+<body>
+
+    <table class="table is-striped is-fullwidth">    
+        <tr>
+            <th> Student Id</th>
+            <th>Course Id</th>
+            <th>Attendence Hours</th>
+            <th>Assignment Average</th>
+            <th>Course Grade</th>
+    
+        </tr>
+        <tr>
+    
+            <tr>
+                {% for list in row %}
+                
+                <tr>
+              
+                    <td>{{ list.studentid }}</td>
+                    <td>{{ list.courseid }}</td>                
+                    <td>{{ list.attendencehours }}</td>
+                    <td>{{ list.assignmentaverage }}</td>
+                    <td>{{ list.coursegrade }}</td>  
+        
+                </tr>
+            {% endfor %}
+            </tr>  
+    
+    
+        </tr>        
+        <ul>
+    
+    </table>
+    
+    <ul>
+        <li><a href="/courseStudent">Student Courses</a></li>
+    </ul>
+    <ul>
+        <li><a href="/courseProperty">List Courses Students Have Taken </a> </li>
+    </ul>
+
+    <ul>
+      <li><a class="active" href="#home">Home</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    
+    <div style="margin-left:25%;padding:1px 16px;height:1000px;">
+      <h2>Fixed Full-height Side Nav</h2>
+      <h3>Try to scroll this area, and see how the sidenav sticks to the page</h3>
+      <p>Notice that this div element has a left margin of 25%. This is because the side navigation is set to 25% width. If you remove the margin, the sidenav will overlay/sit on top of this div.</p>
+      <p>Also notice that we have set overflow:auto to sidenav. This will add a scrollbar when the sidenav is too long (for example if it has over 50 links inside of it).</p>
+      <p>Some text..</p>
+      <p>Some text..</p>
+      <p>Some text..</p>
+      <p>Some text..</p>
+      <p>Some text..</p>
+      <p>Some text..</p>
+      <p>Some text..</p>
+    </div>
+    
+    </body>
+
+
+
+{% endblock %}

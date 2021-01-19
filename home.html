@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block title %} Home {% endblock %}
+{% block content %} 
+
+<div class = "container">
+<div class = "row">
+<div class = "col-md-6 col-md-offset-3">
+<h2> Education Tracking System </h2>
+<body>
+    <br> <br> <br>
+{% if session ['instructor_email'] %}
+
+<ul>
+    <li><a href="/courseInstructor">Instructor Courses</a></li>
+</ul>
+<ul>
+    <li><a href="/departments">List Departments </a></li>
+</ul>
+<ul>
+    <li><a href="/assignments">List Assignments </a></li>
+</ul>
+<ul>
+    <li><a href="/courses">List Courses </a> </li>
+</ul>
+<ul>
+    <li><a href="/studentlist">List Students </a></li>
+</ul>
+
+{% elif session ['student_email'] %}
+
+<ul>
+    <li><a href="/courseStudent">Student Courses</a></li>
+</ul>
+<ul>
+    <li><a href="/courseProperty">List Courses Students Have Taken </a> </li>
+</ul>
+
+{% endif %}
+</body>
+
+</div>
+</div>
+</div>
+
+{% endblock %}
