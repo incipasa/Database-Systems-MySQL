@@ -16,6 +16,7 @@ instructorCourse = []
 registered_course = []
 edit_assi = []
 register_list = []
+#course_op = []
 studentID = 0
 instid = 0
 course_id = 0
@@ -120,7 +121,7 @@ def student_course_register():
         
         check_stu_id = request.form['stud_id']
         course_id = request.form['cou_id']
-        instructor_id = request.form['inst_id']       
+        instructor_id = request.form['inst_id']      
         
         #for course in registered_course:
         #   if course == course_id:
@@ -148,12 +149,36 @@ def student_course_register():
         cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor2.execute ("SELECT  studentcourse.courseid FROM studentcourse JOIN student ON studentcourse.studentid=student.studentid  WHERE student.studentid = %s AND studentcourse.courseid=%s ",(check_stu_id,course_id,) )
         selectCourse = cursor2.fetchone()       
-        studentCourses.clear() 
+        register_list.clear() 
+        
+        cursor3 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor3.execute ("SELECT course.courseid,course.coursename,course.departmentid,course.lessonhour,course.assignmentnumber FROM course JOIN studentcourse ON course.courseid=studentcourse.courseid JOIN student ON studentcourse.studentid=student.studentid WHERE student.studentid = %s ",(check_stu_id,) )
+        courseTuple = cursor3.fetchone()
+        courseList.clear()   
+        
+        cursor4 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor4.execute ("SELECT studentcourse.courseid, studentcourse.studentid, studentcourse.coursegrade, studentcourse.attendencehours,studentcourse.assignmentaverage FROM studentcourse JOIN student ON studentcourse.studentid=student.studentid  WHERE student.studentid = %s ",(check_stu_id,) )
+        select = cursor4.fetchone()       
+        studentCourses.clear()      
+        
+        #cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        #cursor2.execute ("SELECT studentcourse.courseid, studentcourse.studentid, studentcourse.coursegrade, studentcourse.attendencehours,studentcourse.assignmentaverage FROM studentcourse JOIN student ON studentcourse.studentid=student.studentid  WHERE student.studentmail = %s ",(checkStudent_mail,) )
+        #selectCourse = cursor2.fetchone()       
+        #studentCourses.clear()                    
+        
         
         while selectCourse is not None:
             register_list.append(selectCourse)
-            selectCourse = cursor2.fetchone()                     
-        
+            selectCourse = cursor2.fetchone()    
+
+        while courseTuple is not None:
+            courseList.append(courseTuple)
+            courseTuple = cursor3.fetchone()   
+            
+        while select is not None:
+            studentCourses.append(select)
+            select = cursor4.fetchone()  
+                                                  
         return render_template ("forCountRegister.html",data=number_of_rows,row=register_list)         
 
 
@@ -194,7 +219,7 @@ def instructor_login():
         lists.clear()
         
         cursor3 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor3.execute ("SELECT course.courseid,course.coursename,course.departmentid,course.lessonhour,course.assignmentnumber FROM course JOIN instructorcourse ON course.courseid=instructorcourse.courseid JOIN instructor ON instructorcourse.instructorid=instructor.instructorid WHERE instructor.mail = %s ",(check_mail,) )
+        cursor3.execute ("SELECT instructorcourse.building, course.courseid,course.coursename,course.departmentid,course.lessonhour,course.assignmentnumber FROM course JOIN instructorcourse ON course.courseid=instructorcourse.courseid JOIN instructor ON instructorcourse.instructorid=instructor.instructorid WHERE instructor.mail = %s ",(check_mail,) )
         selectCourse = cursor3.fetchone()
         courses.clear()
         
@@ -290,10 +315,10 @@ def assignment_edit():
 
 def edit_course():
     if request.method == 'GET':
-        return render_template ("edit_course.html") 
+        return render_template ("edit_course.html",row=courses) 
 
     else:    
-        #instructorid = request.form['ins_id']
+        instructorid = request.form['ins_id']
         course_id = request.form['cour_id']
         new_course_id = request.form['new_cour_id']
         course_name = request.form['cour_name']
@@ -305,30 +330,66 @@ def edit_course():
         mycursor.execute ("UPDATE course SET coursename = %s, courseid = %s, departmentid = %s, lessonhour = %s, assignmentnumber = %s WHERE courseid = %s", (course_name, new_course_id, department_id, lesson_hour, assignment_number, course_id ) )
         mysql.connection.commit()
         
-        return render_template ("home.html")   
+        cursor6 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor6.execute ("SELECT course.courseid, course.coursename, course.departmentid, course.lessonhour, course.assignmentnumber, instructorcourse.building FROM course JOIN instructorcourse ON course.courseid=instructorcourse.courseid JOIN instructor ON instructorcourse.instructorid=instructor.instructorid WHERE instructor.instructorid = %s ",(instructorid,) )
+        cou = cursor6.fetchone()       
+        courses.clear()   
+        
+        cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor2.execute ("SELECT instructor.mail,instructor.instructorid,instructor.instructorname,instructorcourse.courseid,instructorcourse.building FROM instructor JOIN instructorcourse ON instructor.instructorid=instructorcourse.instructorid WHERE instructor.instructorid = %s ",(instructorid,))
+        row = cursor2.fetchone()  
+        lists.clear()        
+
+        while cou is not None:
+            courses.append(cou)
+            cou = cursor6.fetchone()         
+
+        while row is not None:
+            lists.append(row)
+            row = cursor2.fetchone()        
+        
+        return render_template ("courses.html",row=courses)
     
            
 @app.route('/deleteCourse', methods = ["GET","POST"])
 
 def delete_course():
     if request.method == 'GET':
-        return render_template ("delete_course.html") 
+        return render_template ("delete_course.html",row=courses) 
     
     else:
-        
+        instructorid = request.form['ins_id']
         delete_course = request.form['delete_cour']
         
         mycursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         mycursor.execute ("DELETE FROM course WHERE courseid = %s", (delete_course, ) )
         mysql.connection.commit()             
         
-        return render_template ("home.html")
+        cursor6 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor6.execute ("SELECT course.courseid, course.coursename, course.departmentid, course.lessonhour, course.assignmentnumber, instructorcourse.building FROM course JOIN instructorcourse ON course.courseid=instructorcourse.courseid JOIN instructor ON instructorcourse.instructorid=instructor.instructorid WHERE instructor.instructorid = %s ",(instructorid,) )
+        cou = cursor6.fetchone()       
+        courses.clear()   
+        
+        cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor2.execute ("SELECT instructor.mail,instructor.instructorid,instructor.instructorname,instructorcourse.courseid,instructorcourse.building FROM instructor JOIN instructorcourse ON instructor.instructorid=instructorcourse.instructorid WHERE instructor.instructorid = %s ",(instructorid,))
+        row = cursor2.fetchone()  
+        lists.clear()        
+
+        while cou is not None:
+            courses.append(cou)
+            cou = cursor6.fetchone()         
+
+        while row is not None:
+            lists.append(row)
+            row = cursor2.fetchone()        
+        
+        return render_template ("courses.html",row=courses)
 
 @app.route('/addCourse', methods = ["GET","POST"])
 
 def add_course():
     if request.method == 'GET':
-        return render_template ("add_course.html") 
+        return render_template ("add_course.html",row=courses) 
     
     else:    
         instructorid = request.form['ins_id']
@@ -337,15 +398,32 @@ def add_course():
         department_id = request.form['dep_id']
         lesson_hour = request.form['les_hour']
         assignment_number = request.form['assi_num']   
-        building = "med"
+        building = request.form['build']
         
         curCourse = mysql.connection.cursor()
         curCourse.execute("INSERT INTO course ( coursename, courseid, departmentid, lessonhour, assignmentnumber) VALUES ( %s, %s, %s, %s, %s)", (course_name, course_id, department_id,lesson_hour, assignment_number ))
         curCourse.execute("INSERT INTO instructorcourse (  courseid, instructorid, building) VALUES ( %s, %s, %s)", (course_id, instructorid, building ))
-        
         curCourse.connection.commit()          
+
+        cursor6 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor6.execute ("SELECT course.courseid, course.coursename, course.departmentid, course.lessonhour, course.assignmentnumber, instructorcourse.building FROM course JOIN instructorcourse ON course.courseid=instructorcourse.courseid JOIN instructor ON instructorcourse.instructorid=instructor.instructorid WHERE instructor.instructorid = %s ",(instructorid,) )
+        cou = cursor6.fetchone()       
+        courses.clear()   
         
-        return render_template ("home.html")
+        cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor2.execute ("SELECT instructor.mail,instructor.instructorid,instructor.instructorname,instructorcourse.courseid,instructorcourse.building FROM instructor JOIN instructorcourse ON instructor.instructorid=instructorcourse.instructorid WHERE instructor.instructorid = %s ",(instructorid,))
+        row = cursor2.fetchone()  
+        lists.clear()        
+
+        while cou is not None:
+            courses.append(cou)
+            cou = cursor6.fetchone()         
+
+        while row is not None:
+            lists.append(row)
+            row = cursor2.fetchone()        
+        
+        return render_template ("courses.html",row=courses)
     
 
 @app.route('/deleteAssignment', methods = ["GET","POST"])
@@ -380,6 +458,7 @@ def assignment_add():
         return render_template ("addAssignment.html",row=assignments)      
     
     else:
+        instru_id = request.form['ins_id']
         course_id = request.form['co_id']
         assignment_id = request.form['assi_id']
         assignment_time = request.form['assi_time']
@@ -388,9 +467,19 @@ def assignment_add():
         
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO assignment (courseid, assignmentid, time, assignmnettype, average) VALUES ( %s, %s, %s, %s, %s)", (course_id, assignment_id, assignment_time, assignment_type, assignment_average  ))
-        mysql.connection.commit()        
+        mysql.connection.commit()   
+
+        cursor6 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor6.execute ("SELECT assignment.courseid,assignment.assignmentid,assignment.time,assignment.assignmnettype, assignment.average FROM assignment JOIN instructorcourse ON assignment.courseid=instructorcourse.courseid JOIN instructor ON instructorcourse.instructorid=instructor.instructorid WHERE instructor.instructorid = %s ",(instru_id,) )
+        assi = cursor6.fetchone()       
+        assignments.clear()   
+
+        while assi is not None:
+            assignments.append(assi)
+            assi = cursor6.fetchone()        
         
-        return render_template ("home.html")
+        return render_template ("assignments.html",row=assignments)              
+        
         
                       
 
@@ -427,9 +516,10 @@ def student_edit():
 
 def student_delete_from_course():
     if request.method == 'GET':
-        return render_template ("deleteStudents.html")    
+        return render_template ("deleteStudents.html",row=studentsList)    
     
     else:
+        instructor_id = request.form['inst_id'] 
         course_id = request.form['delete_cour'] 
         student_id = request.form['delete_stu']   
             
@@ -437,15 +527,25 @@ def student_delete_from_course():
         mycursor.execute ("DELETE FROM studentcourse WHERE courseid = %s AND studentid= %s", (course_id, student_id,) )
         mysql.connection.commit()    
         
-        return render_template ("home.html")     
+        cursor6 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor6.execute ("SELECT studentcourse.assignmentaverage,instructorcourse.instructorid, studentcourse.attendencehours, studentcourse.studentid, student.studentname,studentcourse.courseid, course.coursename, studentcourse.coursegrade FROM student JOIN studentcourse ON student.studentid=studentcourse.studentid JOIN course ON studentcourse.courseid=course.courseid JOIN instructorcourse ON instructorcourse.courseid=studentcourse.courseid JOIN instructor ON instructor.instructorid=instructorcourse.instructorid WHERE instructor.instructorid = %s ",(instructor_id,) )
+        getStudents = cursor6.fetchone()       
+        studentsList.clear()   
+
+        while getStudents is not None:
+            studentsList.append(getStudents)
+            getStudents = cursor6.fetchone()                  
+        
+        return render_template ("studentlist.html",row=studentsList)    
 
 @app.route('/addStudents', methods = ["GET","POST"])
 
 def student_add():
     if request.method == 'GET':
-        return render_template ("add_student.html") 
+        return render_template ("add_student.html",row=studentsList) 
     
     else:
+        instructor_id = request.form['inst_id'] 
         student_id = request.form['s_id'] 
         course_id = request.form['c_id']
         inst_id = request.form['inst_id']
@@ -457,7 +557,16 @@ def student_add():
         cur.execute("INSERT INTO studentcourse (studentid, courseid, instructorid, coursegrade, attendencehours, assignmentaverage) VALUES ( %s, %s, %s, %s, %s, %s)", (student_id, course_id, inst_id, student_grade, student_attendence, student_average ))
         mysql.connection.commit() 
         
-        return render_template ("home.html")           
+        cursor6 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor6.execute ("SELECT studentcourse.assignmentaverage,instructorcourse.instructorid, studentcourse.attendencehours, studentcourse.studentid, student.studentname,studentcourse.courseid, course.coursename, studentcourse.coursegrade FROM student JOIN studentcourse ON student.studentid=studentcourse.studentid JOIN course ON studentcourse.courseid=course.courseid JOIN instructorcourse ON instructorcourse.courseid=studentcourse.courseid JOIN instructor ON instructor.instructorid=instructorcourse.instructorid WHERE instructor.instructorid = %s ",(instructor_id,) )
+        getStudents = cursor6.fetchone()       
+        studentsList.clear()   
+
+        while getStudents is not None:
+            studentsList.append(getStudents)
+            getStudents = cursor6.fetchone()                  
+        
+        return render_template ("studentlist.html",row=studentsList)            
         
                   
          
