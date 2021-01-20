@@ -2,11 +2,52 @@
 
 {% block title %} Register {% endblock %}
 {% block content %} 
+<table class="table is-striped is-fullwidth">    
+    <tr>
+        <th>Instructor id</th>
+        <th>Course Id</th>
+        <th>Course name</th>
+        <th>Student id</th>
+        <th>Student Name</th>
+        <th> Attendence (%) </th>
+        <th>Course Grade</th>
+        <th>Assignment Average</th>
+
+    </tr>
+    <tr>
+
+        <tr>
+            {% for list in row %}
+            
+            <tr>
+          
+                <td>{{ list.instructorid }}</td>
+                <td>{{ list.courseid }}</td>
+                <td>{{ list.coursename }}</td>
+                <td>{{ list.studentid }}</td>
+                <td>{{ list.studentname }}</td>
+                <td>{{ list.attendencehours }}</td>
+                <td>{{ list.coursegrade }}</td>
+                <td>{{ list.assignmentaverage }}</td>
+                
+    
+            </tr>
+        {% endfor %}
+        </tr>  
+
+
+    </tr>        
+
+</table>
 
 <div class = "container">
 <div class = "row">
 <div class = "col-md-6 col-md-offset-3">
 <form action="/addStudents" method="POST">
+<div class = "form-group">
+    <label> Instructor ID </label>
+    <input type = "text" class = "form-control" name ="inst_id">
+</div>     
 <div class = "form-group">
     <label> Student ID </label>
     <input type = "text" class = "form-control" name ="s_id">
@@ -14,11 +55,7 @@
 <div class = "form-group">
     <label> Course ID </label>
     <input type = "text" class = "form-control" name ="c_id">
-</div>    
-<div class = "form-group">
-    <label> Instructor ID </label>
-    <input type = "text" class = "form-control" name ="inst_id">
-</div>  
+</div>     
 <div class = "form-group">
     <label> Grade </label>
     <input type = "text" class = "form-control" name ="stu_grade">

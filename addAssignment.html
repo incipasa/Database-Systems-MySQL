@@ -3,11 +3,47 @@
 {% block title %} Register {% endblock %}
 {% block content %} 
 
+<table class="table is-striped is-fullwidth">    
+    <tr>
+        <th>Course Id</th>
+        <th>Assignment Id</th>
+        <th>Assignment Time</th>
+        <th>Assignment Type</th>
+        <th>Assignment Average</th>
+
+    </tr>
+    <tr>
+
+        <tr>
+            {% for list in row %}  
+            
+            <tr>
+          
+                <td>{{ list.courseid }}</td>
+                <td>{{ list.assignmentid }}</td>
+                <td>{{ list.time }}</td>
+                <td>{{ list.assignmnettype }}</td>
+                <td>{{ list.average }}</td>
+    
+            </tr>
+        {% endfor %}
+        </tr>  
+
+
+    </tr>        
+    <ul>
+
+</table>
+
 <div class = "container">
 <div class = "row">
 <div class = "col-md-6 col-md-offset-3">
 <form action="/addAssignment" method="POST">
 <div class = "form-group">
+<div class = "form-group">
+    <label> Instructor ID </label>
+    <input type = "text" class = "form-control" name ="ins_id">
+</div>     
     <label> Course ID </label>
     <input type = "text" class = "form-control" name ="co_id">
 </div>     

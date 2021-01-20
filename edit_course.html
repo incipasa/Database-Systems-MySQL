@@ -3,6 +3,40 @@
 {% block title %} Register {% endblock %}
 {% block content %} 
 
+<table class="table is-striped is-fullwidth">    
+    <tr>
+        <th>Course Id</th>
+        <th>Course name</th>
+        <th>Department id</th>
+        <th>Lesson Hour</th>
+        <th>Assignment Number</th>
+        <th> Building </th>
+
+    </tr>
+    <tr>
+
+        <tr>
+            {% for list in row %}
+            
+            <tr>
+          
+                <td>{{ list.courseid }}</td>
+                <td>{{ list.coursename }}</td>
+                <td>{{ list.departmentid }}</td>
+                <td>{{ list.lessonhour }}</td>
+                <td>{{ list.assignmentnumber }}</td>
+                <td>{{ list.building }}</td>
+    
+            </tr>
+        {% endfor %}
+        </tr>  
+
+
+    </tr>        
+    <ul>
+
+</table>
+
 <div class = "container">
 <div class = "row">
 <div class = "col-md-6 col-md-offset-3">
